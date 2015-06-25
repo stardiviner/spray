@@ -211,7 +211,9 @@ decreasing by one for each subsequent word."
          (overlay-put spray--base-overlay 'face 'spray-base-face)
          (overlay-put spray--accent-overlay 'priority 101)
          (overlay-put spray--accent-overlay 'face 'spray-accent-face)
-         (spray-start))
+         ;; TODO: should I use `save-excursion' here or outside? will it work for `spray-stop'?
+         (save-excursion
+           (spray-start)))
         (t
          (spray-stop)
          (delete-overlay spray--accent-overlay)
