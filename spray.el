@@ -134,8 +134,17 @@ decreasing by one for each subsequent word."
 ;; * faces
 
 (defface spray-base-face
-  '((t (:inherit default)))
+  '((t (:inherit default
+                 :foreground "black"
+                 :background "white")))
   "Face for non-accent characters."
+  :group 'spray)
+
+(defface spray-background-face
+  '((t (:inherit spray-base-face
+                 ;; FIXME: set background face height to window height.
+                 :height (* (window-height) (face-attribute 'default :height)))))
+  "Face for background color."
   :group 'spray)
 
 (defface spray-accent-face
@@ -169,6 +178,7 @@ decreasing by one for each subsequent word."
 ;; * internal vars
 
 (defvar spray--margin-string "")
+(defvar spray--background-overlay nil)
 (defvar spray--base-overlay nil)
 (defvar spray--accent-overlay nil)
 (defvar spray--running nil)
@@ -207,6 +217,8 @@ decreasing by one for each subsequent word."
          (setq cursor-type nil)
          (let ((buffer-face-mode-face `(:height ,spray-height)))
            (buffer-face-mode 1))
+         (overlay-put spray--background-overlay 'priority 90)
+         (overlay-put spray--background-overlay 'face 'spray-background-face)
          (overlay-put spray--base-overlay 'priority 100)
          (overlay-put spray--base-overlay 'face 'spray-base-face)
          (overlay-put spray--accent-overlay 'priority 101)
@@ -216,6 +228,7 @@ decreasing by one for each subsequent word."
          (spray-stop)
          (delete-overlay spray--accent-overlay)
          (delete-overlay spray--base-overlay)
+         (delete-overlay spray--background-overlay)
          (buffer-face-mode -1)
          (if spray--saved-restriction
              (narrow-to-region (car spray--saved-restriction)
