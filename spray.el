@@ -195,6 +195,10 @@ decreasing by one for each subsequent word."
   :init nil
   :keymap spray-mode-map
   (cond (spray-mode
+         (make-frame '((name . "Spray")
+                       (height . '(face-attribute 'spray-background-face :height))
+                       ;; TODO: is there need to adjust frame/window width dynamically? and how?
+                       (width . 100)))
          (setq spray--base-overlay (make-overlay (point-min) (point-max))
                spray--accent-overlay (make-overlay 0 0)
                spray--saved-cursor-type cursor-type
